@@ -1,0 +1,11 @@
+- since must haves lang yung binabago natin, binago ko lang mostly yung post-conditions (set them to NONE) yung mga use cases na: 
+view home page (1.0)
+create account (15.0)
+create organization (3.0)
+upload event (9.0)
+search (2.0)
+view event details (2.2)
+view organization profile (2.1)
+
+- no activity diagram of the flow of events (15)
+- ano yung uplaod organization image sa special requirements ng create organization (3) ?
