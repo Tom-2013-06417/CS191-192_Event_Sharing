@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2015 at 07:05 PM
+-- Generation Time: Dec 14, 2015 at 04:54 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -76,16 +76,36 @@ CREATE TABLE IF NOT EXISTS `event` (
   `venue` varchar(100) NOT NULL,
   `going` int(11) NOT NULL,
   `organization_id` varchar(50) NOT NULL,
-  `pubmat` text NOT NULL,
-  `tag` varchar(50) NOT NULL
+  `pubmat` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `event`
 --
 
-INSERT INTO `event` (`event_id`, `title`, `subtitle`, `description`, `date`, `time`, `venue`, `going`, `organization_id`, `pubmat`, `tag`) VALUES
-(1, 'The Future of Technology in Startup Culture', NULL, 'UP CURSOR''s year-long series of seminars and workshops for students about awesome Computer Science topics not found in you typical class syllabus!', '2015-10-15', '13:00:00', 'AECH, 2F DCS, UP AECH, UP Diliman, Quezon City', 20, 'UP Association of Computer Science Majors', 'https://z-n.ak.fbcdn.net/sphotos-c.ak/hphotos-ak-xat1/t31.0-8/s960x960/12068553_499512830210264_8549170489875322300_o.png', '');
+INSERT INTO `event` (`event_id`, `title`, `subtitle`, `description`, `date`, `time`, `venue`, `going`, `organization_id`, `pubmat`) VALUES
+(1, 'The Future of Technology in Startup Culture', NULL, 'UP CURSOR''s year-long series of seminars and workshops for students about awesome Computer Science topics not found in you typical class syllabus!', '2015-10-15', '13:00:00', 'AECH, 2F DCS, UP AECH, UP Diliman, Quezon City', 20, 'UP Association of Computer Science Majors', 'https://z-n.ak.fbcdn.net/sphotos-c.ak/hphotos-ak-xat1/t31.0-8/s960x960/12068553_499512830210264_8549170489875322300_o.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events_with_tags`
+--
+
+CREATE TABLE IF NOT EXISTS `events_with_tags` (
+  `event_id` int(11) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `tag` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `events_with_tags`
+--
+
+INSERT INTO `events_with_tags` (`event_id`, `title`, `tag`) VALUES
+(1, 'The Future of Technology in Startup Culture', 'ACLE'),
+(1, 'The Future of Technology in Startup Culture', 'Technology'),
+(1, 'The Future of Technology in Startup Culture', 'Financial');
 
 -- --------------------------------------------------------
 
@@ -144,6 +164,40 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
 INSERT INTO `subscriptions` (`organization_id`, `account_id`) VALUES
 ('UP Association for Computing Machinery', 2);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE IF NOT EXISTS `tags` (
+  `tag` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`tag`) VALUES
+('ACLE'),
+('College Wide'),
+('Department Wide'),
+('Film'),
+('Financial'),
+('Free'),
+('Language'),
+('Mathematics'),
+('Paid'),
+('Private'),
+('Public'),
+('Science'),
+('Society'),
+('Sports'),
+('Technology'),
+('University Wide'),
+('UP Event'),
+('Workshop');
+
 --
 -- Indexes for dumped tables
 --
@@ -164,7 +218,13 @@ ALTER TABLE `complaint`
 -- Indexes for table `event`
 --
 ALTER TABLE `event`
-  ADD PRIMARY KEY (`event_id`), ADD KEY `organization_id` (`organization_id`);
+  ADD PRIMARY KEY (`event_id`), ADD KEY `organization_id` (`organization_id`), ADD KEY `title` (`title`);
+
+--
+-- Indexes for table `events_with_tags`
+--
+ALTER TABLE `events_with_tags`
+  ADD KEY `event_id` (`event_id`), ADD KEY `title` (`title`), ADD KEY `tag` (`tag`);
 
 --
 -- Indexes for table `organization`
@@ -183,6 +243,12 @@ ALTER TABLE `organization_admins`
 --
 ALTER TABLE `subscriptions`
   ADD PRIMARY KEY (`organization_id`,`account_id`), ADD KEY `subscription:org_account_2` (`account_id`);
+
+--
+-- Indexes for table `tags`
+--
+ALTER TABLE `tags`
+  ADD KEY `tag` (`tag`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -212,6 +278,14 @@ ALTER TABLE `event`
 --
 ALTER TABLE `event`
 ADD CONSTRAINT `event:event_org` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`);
+
+--
+-- Constraints for table `events_with_tags`
+--
+ALTER TABLE `events_with_tags`
+ADD CONSTRAINT `eventTagAssociation` FOREIGN KEY (`tag`) REFERENCES `tags` (`tag`),
+ADD CONSTRAINT `eventTagID` FOREIGN KEY (`event_id`) REFERENCES `event` (`event_id`),
+ADD CONSTRAINT `eventTagTitle` FOREIGN KEY (`title`) REFERENCES `event` (`title`);
 
 --
 -- Constraints for table `organization_admins`
